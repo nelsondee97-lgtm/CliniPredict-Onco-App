@@ -15,6 +15,26 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
+st.markdown("""
+<style>
+body {
+    background-color: #f5f7fa;
+}
+
+.stApp {
+    background-color: #f5f7fa;
+}
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Load model
 model = joblib.load("cancer_model.pkl")
@@ -23,6 +43,7 @@ model = joblib.load("cancer_model.pkl")
 st.title("🧠 CliniPredict-Onco-App")
 st.markdown("AI-powered support tool for early cancer risk assessment")
 st.markdown("---")
+st.image("banner.jpg", use_column_width=True)
 
 # Sidebar
 st.sidebar.header("📋 Patient Info")
