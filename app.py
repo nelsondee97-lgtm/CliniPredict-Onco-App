@@ -4,7 +4,7 @@ import numpy as np
 
 st.set_page_config(page_title="LifeLens", layout="centered")
 
-st.title("🧠 LifeLens – Cancer Risk Predictor")
+st.title("🧠 Clinipredict-Cancer-Predictor")
 st.markdown("### Predict cancer risk using medical features")
 
 # Load model
