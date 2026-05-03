@@ -176,5 +176,3 @@ elif mode == "Bulk Upload":
 
         except Exception as e:
             st.error(f"⚠️ Error: {e}")
-    except Exception as e:
-        st.error(f"⚠️ Error: {e}")
