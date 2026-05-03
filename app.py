@@ -2,55 +2,70 @@ import streamlit as st
 import joblib
 import numpy as np
 
-st.set_page_config(page_title="CliniPredict", layout="centered")
+st.set_page_config(page_title="CliniPredict", layout="wide")
 
 st.title("🧠 CliniPredict-Onco-App")
-st.markdown(
-    """
-    <style>
-    .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        font-size: 16px;
-        border-radius: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown("### AI-powered early risk detection based on tumor characteristics")
-
-# Load model
-model = joblib.load("cancer_model.pkl")
-
-st.markdown("## 📝 Enter Patient Details")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    mean_radius = st.number_input("Mean Radius", 0.0, 50.0, 10.0)
-    mean_texture = st.number_input("Mean Texture", 0.0, 50.0, 15.0)
-
-with col2:
-    texture_error = st.number_input("Texture Error", 0.0, 10.0, 1.0)
-    worst_radius = st.number_input("Worst Radius", 0.0, 50.0, 20.0)
-    compactness_error = st.number_input("Compactness Error", 0.0, 1.0, 0.05)
+st.markdown("AI-powered support tool for early cancer risk assessment")
 
 st.markdown("---")
 
-if st.button("🔍 Predict Risk"):
+# Load model
+model = joblib.load("model.pkl")
+
+# Sidebar (like real apps 👀)
+st.sidebar.header("📋 Patient Info")
+patient_name = st.sidebar.text_input("Patient Name")
+patient_age = st.sidebar.slider("Age", 10, 100, 30)
+patient_gender = st.sidebar.selectbox("Gender", ["Female", "Male"])
+
+st.sidebar.markdown("---")
+st.sidebar.info("This tool assists clinicians and does not replace diagnosis.")
+
+# Main layout
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("🔬 Tumor Measurements")
+
+    mean_radius = st.slider("Mean Radius", 5.0, 30.0, 14.0)
+    mean_texture = st.slider("Mean Texture", 5.0, 40.0, 19.0)
+    texture_error = st.slider("Texture Error", 0.0, 5.0, 1.0)
+
+with col2:
+    st.subheader("📊 Advanced Metrics")
+
+    worst_radius = st.slider("Worst Radius", 10.0, 40.0, 25.0)
+    compactness_error = st.slider("Compactness Error", 0.0, 0.5, 0.05)
+
+st.markdown("---")
+
+# Prediction
+if st.button("🔍 Run Risk Analysis"):
+
     input_data = np.array([[mean_radius, mean_texture, texture_error, worst_radius, compactness_error]])
 
     prediction = model.predict(input_data)
     probability = model.predict_proba(input_data)[0][1]
 
-    st.subheader("🧾 Prediction Result")
+    st.subheader("🧾 Clinical Result")
 
     if prediction[0] == 0:
-        st.error(f"⚠️ High Risk (Malignant)\n\nConfidence: {1 - probability:.2f}")
+        st.error(f"⚠️ HIGH RISK (Malignant)\nConfidence: {1 - probability:.2f}")
     else:
-        st.success(f"✅ Low Risk (Benign)\n\nConfidence: {probability:.2f}")
+        st.success(f"✅ LOW RISK (Benign)\nConfidence: {probability:.2f}")
 
-    st.markdown("---")
-    st.markdown("### 💡 Insight")
-    st.info("Tumor size and texture irregularity are key indicators in cancer detection.")
+    # Explanation section
+    st.markdown("### 📌 Model Insight")
+    st.write("""
+    - Larger tumor size increases risk
+    - Irregular texture is a strong indicator
+    - Shape inconsistency contributes to malignancy prediction
+    """)
+
+    # Patient summary
+    st.markdown("### 🧍 Patient Summary")
+    st.write(f"""
+    Name: {patient_name}  
+    Age: {patient_age}  
+    Gender: {patient_gender}
+    """)
