@@ -5,8 +5,20 @@ import numpy as np
 st.set_page_config(page_title="Clinipredict", layout="centered")
 
 st.title("🧠 Clinipredict – Cancer Risk Predictor")
+st.markdown(
+    """
+    <style>
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.markdown("### AI-powered early risk detection based on tumor characteristics")
-st.markdown("---")
 
 # Load model
 model = joblib.load("cancer_model.pkl")
